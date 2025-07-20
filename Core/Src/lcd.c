@@ -40,11 +40,8 @@ ST7735_IO_t st7735_pIO = {
 ST7735_Object_t st7735_pObj;
 uint32_t st7735_id;
 
-void LCD_Test(void)
+void LCD_Init(void)
 {
-
-	//uint8_t text[20];
-
 	ST7735Ctx.Orientation = ST7735_ORIENTATION_LANDSCAPE_ROT180;
 	ST7735Ctx.Panel = HannStar_Panel;
 	ST7735Ctx.Type = ST7735_0_9_inch_screen;
@@ -54,39 +51,8 @@ void LCD_Test(void)
 	ST7735_LCD_Driver.ReadID(&st7735_pObj,&st7735_id);
 	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width,ST7735Ctx.Height, BLACK);
 
-	/*
-	LCD_SetBrightness(0);
-	extern unsigned char WeActStudiologo_160_80[];
-	ST7735_LCD_Driver.DrawBitmap(&st7735_pObj,0,0,WeActStudiologo_160_80);
-
-  	uint32_t tick = HAL_GetTick();
-	while (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) != GPIO_PIN_SET)
-	{
-		HAL_Delay(10);
-
-		if (HAL_GetTick() - tick <= 1000)
-			LCD_SetBrightness((HAL_GetTick() - tick) * 100 / 1000);
-		else if (HAL_GetTick() - tick <= 3000)
-		{
-			sprintf((char *)&text, "%03d", (HAL_GetTick() - tick - 1000) / 10);
-			LCD_ShowString(ST7735Ctx.Width - 30, 1, ST7735Ctx.Width, 16, 16, text);
-			ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, ST7735Ctx.Height - 3, (HAL_GetTick() - tick - 1000) * ST7735Ctx.Width / 2000, 3, 0xFFFF);
-		}
-		else if (HAL_GetTick() - tick > 3000)
-			break;
-	}
-	while (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_SET)
-	{
-		HAL_Delay(10);
-	}
-
-	sprintf((char *)&text, "WeAct Studio");
-	LCD_ShowString(4, 4, ST7735Ctx.Width, 16, 16, text);
-	sprintf((char *)&text, "STM32H7xx 0x%X", HAL_GetDEVID());
-	LCD_ShowString(4, 22, ST7735Ctx.Width, 16, 16, text);
-	sprintf((char *)&text, "LCD ID:0x%X", st7735_id);
-	LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
-*/
+	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width,ST7735Ctx.Height, BLACK);
+	LCD_SetBrightness(1024);
 }
 
 void LCD_SetBrightness(uint32_t Brightness)
@@ -151,7 +117,7 @@ void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num)
 		}
 	}
 
-	ST7735_FillRGBRect(&st7735_pObj,x0,y0,(uint8_t *)&write);
+	ST7735_FillRGBRect(&st7735_pObj,x0,y0,(uint8_t *)&write,6,12);
 	POINT_COLOR=colortemp;
 }
 

@@ -667,20 +667,20 @@ int32_t ST7735_DrawBitmap(ST7735_Object_t *pObj, uint32_t Xpos, uint32_t Ypos, u
   * @param  Height Specifies the rectangle height
   * @retval The component status
   */
-int32_t ST7735_FillRGBRect(ST7735_Object_t *pObj, uint32_t Xpos, uint32_t Ypos, uint8_t *pData)
+int32_t ST7735_FillRGBRect(ST7735_Object_t *pObj, uint32_t Xpos, uint32_t Ypos, uint8_t *pData, uint32_t Width, uint32_t Height)
 {
   int32_t ret = ST7735_OK;
   static uint8_t pdata[640];
   uint8_t *rgb_data = pData;
   uint32_t i, j;
 
-  if(((Xpos + 6) > ST7735Ctx.Width) || ((Ypos + 12) > ST7735Ctx.Height))
+  if(((Xpos + Width) > ST7735Ctx.Width) || ((Ypos + Height) > ST7735Ctx.Height))
   {
     ret = ST7735_ERROR;
   }/* Set Cursor */
   else
   {
-    for(j = 0; j < 12; j++)
+    for(j = 0; j < Height; j++)
     {
       if(ST7735_SetCursor(pObj, Xpos, Ypos+j) != ST7735_OK)
       {
@@ -688,13 +688,13 @@ int32_t ST7735_FillRGBRect(ST7735_Object_t *pObj, uint32_t Xpos, uint32_t Ypos, 
       }
       else
       {
-        for(i = 0; i < 6; i++)
+        for(i = 0; i < Width; i++)
         {
           pdata[2U*i] = (uint8_t)(*(rgb_data));
           pdata[(2U*i) + 1U] = (uint8_t)(*(rgb_data + 1));
           rgb_data +=2;
         }
-        if(st7735_send_data(&pObj->Ctx, (uint8_t*)&pdata[0], 2U*6) != ST7735_OK)
+        if(st7735_send_data(&pObj->Ctx, (uint8_t*)&pdata[0], 2U*Width) != ST7735_OK)
         {
           ret = ST7735_ERROR;
         }
@@ -735,9 +735,6 @@ int32_t ST7735_DrawHLine(ST7735_Object_t *pObj, uint32_t Xpos, uint32_t Ypos, ui
       /* Exchange LSB and MSB to fit LCD specification */
       pdata[2U*i] = (uint8_t)(Color >> 8);
       pdata[(2U*i) + 1U] = (uint8_t)(Color);
-
-//      pdata[(2U*i) + 1U] = (uint8_t)(Color >> 8);
-//      pdata[2U*i] = (uint8_t)(Color);
     }
     if(st7735_send_data(&pObj->Ctx, (uint8_t*)&pdata[0], 2U*Length) != ST7735_OK)
     {

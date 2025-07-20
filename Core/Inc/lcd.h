@@ -37,7 +37,7 @@ extern uint32_t st7735_id;
 extern uint16_t POINT_COLOR;	//������ɫ
 extern uint16_t BACK_COLOR;  //����ɫ
 
-void LCD_Test(void);
+void LCD_Init(void);
 void LCD_SetBrightness(uint32_t Brightness);
 uint32_t LCD_GetBrightness(void);
 void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num);
